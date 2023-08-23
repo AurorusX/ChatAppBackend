@@ -1,3 +1,4 @@
+using Api.Hubs;
 using Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 
 builder.Services.AddSingleton<ChatService>();
+builder.Services.AddSignalR();
+
 
 
 //builder.Services.AddSwaggerGen();
@@ -28,8 +31,9 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthorization(); 
 
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
 
 app.Run();

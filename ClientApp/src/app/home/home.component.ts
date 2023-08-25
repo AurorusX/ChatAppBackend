@@ -1,3 +1,4 @@
+import { ChatService } from './../services/chat.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -8,36 +9,52 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class HomeComponent {
 
-  userForm:FormGroup =new FormGroup({});
+      userForm:FormGroup =new FormGroup({});
 
-//state of submission
-  submitted=false;
+    //state of submission
+      submitted=false;
+      ApiErrors:string[]=[];
 
-  constructor(private formbuilder :FormBuilder){}
+      constructor(private formbuilder :FormBuilder,private chatService:ChatService){}
 
-  ngOnInit():void{
-    this.initializeForm();
+      ngOnInit():void{
+        this.initializeForm();
 
-  }
-  initializeForm(){
-    this.userForm=this.formbuilder.group({
-
-      name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(15)]]
-    })
-
-  }
-
-    submitForm(){
-      this.submitted=true;
-
-      if (this.userForm.valid){
-        console.log(this.userForm.value);
       }
-    }
+      initializeForm(){
+        this.userForm=this.formbuilder.group({
+
+          name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(15)]]
+        })
+
+      }
+
+        submitForm(){
+          this.submitted=true;
+          this.ApiErrors=[];
+
+            if (this.userForm.valid){
+              this.chatService.registerUser(this.userForm.value).subscribe({
+                next:()=>{
+                  console.log('Open Chat')
+
+                },
+                error: error =>{
+                  if(typeof(error.error)!=='object'){
+                    this.ApiErrors.push(error.error);
+                  }
+                }
+
+                })
+
+
+            }
+        }
+
+      }
 
 
 
-  }
 
 
 

@@ -14,6 +14,7 @@ export class HomeComponent {
     //state of submission
       submitted=false;
       ApiErrors:string[]=[];
+      OpenChat=false;
 
       constructor(private formbuilder :FormBuilder,private chatService:ChatService){}
 
@@ -36,7 +37,11 @@ export class HomeComponent {
             if (this.userForm.valid){
               this.chatService.registerUser(this.userForm.value).subscribe({
                 next:()=>{
+                  this.chatService.name=this.userForm.get('name')?.value;
                   console.log('Open Chat')
+                  this.OpenChat=true;
+                  this.userForm.reset();
+                  this.submitted=false;
 
                 },
                 error: error =>{
@@ -49,6 +54,10 @@ export class HomeComponent {
 
 
             }
+        }
+
+        closeChat(){
+          this.OpenChat=false;
         }
 
       }

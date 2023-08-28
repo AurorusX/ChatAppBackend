@@ -18,19 +18,34 @@ namespace Api.Hubs
         {
 
             await Groups.AddToGroupAsync(Context.ConnectionId, "AscendantChat");
-            await Clients.Caller.SendAsync("Userconnected");
+            await Clients.Caller.SendAsync("UserConnected");
         }
 
 		public override async Task OnDisconnectedAsync(Exception ex )
 		{
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "AscendantChat");
+			var user =_chatservice.GetUserByConnectionId(Context.ConnectionId);
+			_chatservice.RemoveUserFromList(user);
+			await DisplayOnlineUsers();
 			await base.OnDisconnectedAsync(ex);
+
 			
 		}
 
 
 
+		public  async Task AddUserConnectionId(string name)
+		{
+			_chatservice.AddUserConnectionId(name,Context.ConnectionId);
+			await DisplayOnlineUsers();
 
+		}
+
+		private async Task DisplayOnlineUsers()
+		{
+			var usersOnline = _chatservice.GetOnlineUsers();
+			await Clients.Groups("AscendantChat").SendAsync("usersOnline", usersOnline);
+		}
 
 	}
 }

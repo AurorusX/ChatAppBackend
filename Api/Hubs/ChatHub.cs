@@ -1,4 +1,5 @@
-﻿using Api.Services;
+﻿using Api.DTOs;
+using Api.Services;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
@@ -47,5 +48,10 @@ namespace Api.Hubs
 			await Clients.Groups("AscendantChat").SendAsync("usersOnline", usersOnline);
 		}
 
+		private async Task ReceiveMessage(MessageDto message)
+		{
+			
+			await Clients.Groups("AscendantChat").SendAsync("NewMessage", message);
+		}
 	}
 }

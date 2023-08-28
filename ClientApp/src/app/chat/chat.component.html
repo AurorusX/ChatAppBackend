@@ -44,88 +44,13 @@
           <span class="text-primary">User 2: </span>
           <span class="ml-1">messages here  </span>
 
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
 
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 3: </span>
-          <span class="ml-1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum veritatis numquam voluptatibus in nesciunt voluptatum.
-            Possimus similique vitae sunt molestias fugit iure maiores nam,
-            ratione repellat eligendi facere autem porro!</span>
-
-        </p>
 
       </div>
     </div>
-    <div class="card-footer"></div>
-    <form autocomplete="off" >
-      <div class="row">
-        <div class="col-9">
-          <input type="text" class="form-control" placeholder="Send message">
-
-        </div>
-        <div class="col-3">
-          <div class="d-grid">
-            <button class="btn btn-dark btn-block" type="submit">Send</button>
-          </div>
-
-        </div>
-      </div>
-    </form>
+    <div class="card-footer">
+      <app-chat-input (contentEmmitter)="sendMessage($event)"> </app-chat-input>
+  </div>
 
 
 

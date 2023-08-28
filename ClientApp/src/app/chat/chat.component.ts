@@ -23,4 +23,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.closeChatEmmitter.emit();
 
   }
+
+  sendMessage(content:string){
+    this.chatService.sendMessage(content);
+
+  }
 }

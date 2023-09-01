@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-2">
     <div class="d-grid">
-      <button class="btn btn-primary btn-block" type="button" (click)=" navigateToHome">Home</button>
+      <button class="btn btn-primary btn-block" type="button" (click)=" navigateToHome()">Home</button>
     </div>
   </div>
 </div>
@@ -17,6 +17,7 @@
               <button type="button"
               class="btn card-text btn-block"
               [ngClass]="{'btn-info': user===chatService.name,'btn-dark': user!==chatService.name}"
+              (dblclick)="openPrivateChat(user)"
               [disabled]="user===chatService.name">
 
               {{user}}
@@ -34,19 +35,7 @@
   <div class="card border-secondary">
     <div class="card-header h3 text-muted text-center">Messages </div>
     <div class="card-body" style="min-height: 501px;">
-      <div style="overflow-y: auto; height: 461px;">
-        <p class="card-text">
-          <span class="text-primary">User 1: </span>
-          <span class="ml-1">messages here  </span>
-
-        </p>
-        <p class="card-text">
-          <span class="text-primary">User 2: </span>
-          <span class="ml-1">messages here  </span>
-
-
-
-      </div>
+      <app-messages [messages]="chatService.messages"></app-messages>
     </div>
     <div class="card-footer">
       <app-chat-input (contentEmmitter)="sendMessage($event)"> </app-chat-input>

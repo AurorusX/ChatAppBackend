@@ -1,6 +1,8 @@
 using Api.Hubs;
 using Api.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -13,9 +15,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 
-builder.Services.AddSingleton<ChatService>();
+//builder.Services.AddSingleton<ChatService>();
+builder.Services.AddScoped<ChatService>();
+
 builder.Services.AddSignalR();
 builder.Services.AddCors();
+builder.Services.AddDbContext<ChatDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
 
 
@@ -31,10 +37,19 @@ var app = builder.Build();
 //}
 
 //Middleware
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
+//app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200", "http://localhost:45429", "http://localhost:44366"));
+//app.UseCors(x => x
+   // .AllowAnyHeader()
+   // .AllowAnyMethod()
+    //.AllowAnyOrigin());// Add your allowed origins here
+    
 app.UseAuthorization(); 
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/hubs/chat");
+app.MapFallbackToController("index", "fallback");
 
 app.Run();

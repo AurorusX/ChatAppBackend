@@ -1,4 +1,4 @@
-<ng-container *ngIf="OpenChat==false">
+<ng-container *ngIf="OpenChat===false">
   <div class="text-center">
     <h1> Let's chat a bit and get <span class="text-info">connected</span> with others </h1>
   </div>
@@ -22,7 +22,7 @@
             </span>
           </div>
 
-          <div class="form-floating" *ngIf="ApiErrors.length>0">
+          <div class="form-floating" *ngIf="ApiErrors.length > 0">
             <ul class="text-danger">
               <li *ngFor="let err of ApiErrors">
                 {{err}}
@@ -39,8 +39,6 @@
 
         </form>
 
-
-
       </main>
 
     </div>
@@ -49,7 +47,7 @@
 </ng-container>
 
 
-<ng-container *ngIf="OpenChat==true">
+<ng-container *ngIf="OpenChat===true">
   <app-chat (closeChatEmmitter)="closeChat()"></app-chat>
 </ng-container>
 

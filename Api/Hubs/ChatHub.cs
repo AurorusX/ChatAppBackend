@@ -1,7 +1,11 @@
 ﻿using Api.DTOs;
+using Api.Models;
 using Api.Services;
+
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Api.Hubs
@@ -9,10 +13,15 @@ namespace Api.Hubs
 	public class ChatHub : Hub
 	{
         private readonly ChatService _chatservice;
-        public ChatHub(ChatService chatService)
+        private readonly ChatDbContext _chatdbcontext;
+        public ChatHub(ChatService chatService, ChatDbContext ChatDbContext)
         {
             _chatservice = chatService;
-        }
+            _chatdbcontext = ChatDbContext;
+
+
+
+    }
 
 
         public override async Task OnConnectedAsync()
@@ -48,10 +57,74 @@ namespace Api.Hubs
 			await Clients.Groups("AscendantChat").SendAsync("usersOnline", usersOnline);
 		}
 
-		private async Task ReceiveMessage(MessageDto message)
+		public async Task ReceiveMessage(MessageDto message)
+
+
 		{
-			
-			await Clients.Groups("AscendantChat").SendAsync("NewMessage", message);
+            message.ChatId = "AscendantChat";
+			message.Timestamp = DateTime.Now;
+            SaveMessageToDatabase(message);
+            await Clients.Group("AscendantChat").SendAsync("NewMessage", message);
 		}
-	}
+
+		public async Task CreatePrivateChat(MessageDto message)
+		{
+			string privategroupname = GetPrivateGroupName(message.From,message.To);
+			await Groups.AddToGroupAsync(Context.ConnectionId, privategroupname);
+			var toConnectionId = _chatservice.GetConnectionIdByUser(message.To);
+			await Groups.AddToGroupAsync(toConnectionId, privategroupname);
+
+            message.ChatId = privategroupname;
+            SaveMessageToDatabase(message);
+
+            await Clients.Client(toConnectionId).SendAsync("OpenPrivateChat", message);
+		}
+
+		public async Task ReceivePrivateMessage(MessageDto message)
+		{
+			string privategroupname = GetPrivateGroupName(message.From, message.To);
+			message.ChatId = privategroupname;
+			
+			SaveMessageToDatabase(message);
+
+			await Clients.Group(privategroupname).SendAsync("NewPrivateMessage", message);
+		}
+
+		public async Task RemovePrivateChat(string from, string to)
+		{
+			string privategroupname = GetPrivateGroupName(from, to);
+			await Clients.Group(privategroupname).SendAsync("ClosePrivateChat");
+
+			await Groups.RemoveFromGroupAsync(Context.ConnectionId, privategroupname);
+			var toConnectionId = _chatservice.GetConnectionIdByUser(to);
+			await Groups.RemoveFromGroupAsync(toConnectionId, privategroupname);
+
+		}
+
+
+		private string GetPrivateGroupName(string from , string to) { 
+			//from: shane to: edward   edward-shane
+			var stringCompare =string.CompareOrdinal(from, to) < 0;
+			return stringCompare ? $"{from}-{to}" : $"{to}-{from}";
+		}
+
+
+        private void SaveMessageToDatabase(MessageDto message)
+        {
+            var newMessage = new ChatMessage
+            {
+                From = message.From,
+				To = message.To,
+                Content = message.Content,
+                Timestamp = DateTime.UtcNow,
+				ChatId = message.ChatId,
+            };
+
+            _chatdbcontext.ChatMessages.Add(newMessage);
+            _chatdbcontext.SaveChanges();
+
+           
+        }
+
+    }
 }

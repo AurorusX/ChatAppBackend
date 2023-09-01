@@ -2,4 +2,6 @@ export interface Message{
   from:string;
   to?:string;
   content: string;
+  timestamp?:Date;
+  chatId?:string
 }

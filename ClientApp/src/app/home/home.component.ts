@@ -38,11 +38,9 @@ export class HomeComponent {
               this.chatService.registerUser(this.userForm.value).subscribe({
                 next:()=>{
                   this.chatService.name=this.userForm.get('name')?.value;
-                  console.log('Open Chat')
                   this.OpenChat=true;
                   this.userForm.reset();
                   this.submitted=false;
-
                 },
                 error: error =>{
                   if(typeof(error.error)!=='object'){

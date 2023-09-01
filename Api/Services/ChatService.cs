@@ -1,11 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using Api.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Api.Services
 {
 	public class ChatService
+
+
 	{
-		private static readonly Dictionary<string,string>Users = new Dictionary<string,string>();
+       
+        private readonly ChatDbContext _chatdbcontext;
+        public ChatService(ChatDbContext ChatDbContext)
+        {
+           
+            _chatdbcontext = ChatDbContext;
+        }
+
+
+        private static readonly Dictionary<string,string> Users = new Dictionary<string,string>();
 
 
 		public bool AddUserToLIst(string addedUser)
@@ -26,9 +38,12 @@ namespace Api.Services
 
 		public void AddUserConnectionId(string user,string connectionId)
 		{
-			if (Users.ContainsKey(user))
+			lock (Users)
 			{
-				Users[user] = connectionId;
+				if (Users.ContainsKey(user))
+				{
+					Users[user] = connectionId;
+				}
 			}
 		}
 
@@ -70,19 +85,21 @@ namespace Api.Services
 
 
 
-		public void GetChatHistory()
-		{
-
-		}
-
-
-
-
-
+        public List<ChatMessage> GetChatMessages(string chatId)
+        {
+            return _chatdbcontext.ChatMessages
+                .Where(message => message.ChatId == chatId)
+                .ToList();
+        }
+		
 
 
 
 
 
-	}
+
+
+
+
+    }
 } 

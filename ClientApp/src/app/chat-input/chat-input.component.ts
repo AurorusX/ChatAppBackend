@@ -17,7 +17,7 @@ export class ChatInputComponent implements OnInit {
   }
 
   sendMessage(){
-    if(this.content.trim()!==""){
+    if(this.content.trim()!== ""){
     this.contentEmmitter.emit(this.content);
     }
 

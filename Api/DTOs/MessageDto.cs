@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Api.DTOs
 {
@@ -9,5 +10,9 @@ namespace Api.DTOs
 		public string To { get; set; }
 		[Required]
 		public string Content { get; set; }
-	}
+
+		public string ChatId { get; set; }
+
+        public DateTime? Timestamp { get; set; }
+    }
 }

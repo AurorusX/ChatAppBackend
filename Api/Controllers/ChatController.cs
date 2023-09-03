@@ -4,7 +4,9 @@ using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -22,7 +24,7 @@ namespace Api.Controllers
 
 
 
-
+        [AllowAnonymous]
         [HttpPost("register-user")]
         public IActionResult RegisterUser(UserDto model)
         {
@@ -40,11 +42,18 @@ namespace Api.Controllers
 
 
         [HttpGet("get-chat-messages")]
-        public IActionResult<ChatMessage[]> RetrieveMessages(string chatId)
+        public async Task<IActionResult> RetrieveMessagesAsync(string chatId)
         {
             try
             {
-                var messages = _chatService.GetChatMessages(chatId);
+                var messages = await _chatService.GetChatMessagesAsync(chatId);
+
+                if (messages.IsNullOrEmpty())
+                {
+                    chatId = await _chatService.ConvertToOtherOrderAsync(chatId);
+                    messages = await _chatService.GetChatMessagesAsync(chatId);
+
+                }
                 // 200 OK status code with the messages
                 return Ok(messages);
             }

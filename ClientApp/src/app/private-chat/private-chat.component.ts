@@ -13,10 +13,12 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
   constructor(public activeModal:NgbActiveModal, public chatService:ChatService){
       }
   ngOnInit(): void {
-this.loadPrivateChatMessages();
+this.chatService.privateMessages=[];
+ this.loadPrivateChatMessages();
   }
   ngOnDestroy(): void {
     this.chatService.closePrivateChatMessage(this.toUser)
+    //this.chatService.privateMessages=[];
   }
 
   sendMessage(content:string){
@@ -32,7 +34,7 @@ this.loadPrivateChatMessages();
       },
       (error) => {
         console.error('Error fetching chat messages:', error);
-        // Handle the error, show a user-friendly message, or take other appropriate actions.
+        // Handle the error
       }
     );
   }

@@ -1,6 +1,8 @@
 ﻿using Api.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Api.Services
 {
@@ -85,14 +87,31 @@ namespace Api.Services
 
 
 
-        public List<ChatMessage> GetChatMessages(string chatId)
+        public Task<List<ChatMessage>>GetChatMessagesAsync(string chatId)
         {
             return _chatdbcontext.ChatMessages
                 .Where(message => message.ChatId == chatId)
-                .ToList();
+                .ToListAsync();
         }
-		
 
+        public Task<string> ConvertToOtherOrderAsync(string input)
+        {
+            // Split the input string using the '-' separator
+            string[] parts = input.Split('-');
+
+            // Check if there are exactly two parts
+            if (parts.Length == 2)
+            {
+                // Swap the order of the parts and concatenate with '-'
+                string result = $"{parts[1]}-{parts[0]}";
+                return Task.FromResult(result);
+            }
+            else
+            {
+                // Handle the case where the input is not in the expected format
+                return Task.FromResult("Invalid input format");
+            }
+        }
 
 
 

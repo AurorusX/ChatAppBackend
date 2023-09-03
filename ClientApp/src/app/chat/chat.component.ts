@@ -39,7 +39,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 //Revisit to make sure
   loadChatMessages(): void {
-    const chatId = 'AscendantChat'; // Replace with your chat identifier
+    const chatId = 'AscendantChat';
     this.chatService.getChatMessages(chatId).subscribe(
       (messages) => {
         // Assuming messages is an array, concatenate the arrays.
@@ -47,7 +47,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error('Error fetching chat messages:', error);
-        // Handle the error, show a user-friendly message, or take other appropriate actions.
+        // Handle the error
       }
     );
   }

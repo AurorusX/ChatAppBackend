@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.Models
 {
+    [Serializable]
     public class ChatMessage
     {
         public int Id { get; set; }

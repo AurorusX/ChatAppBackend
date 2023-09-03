@@ -84,8 +84,9 @@ namespace Api.Hubs
 		{
 			string privategroupname = GetPrivateGroupName(message.From, message.To);
 			message.ChatId = privategroupname;
-			
-			SaveMessageToDatabase(message);
+            message.Timestamp = DateTime.Now;
+
+            SaveMessageToDatabase(message);
 
 			await Clients.Group(privategroupname).SendAsync("NewPrivateMessage", message);
 		}

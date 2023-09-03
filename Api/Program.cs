@@ -39,7 +39,7 @@ builder.Services.AddSignalR(options =>
     options.ClientTimeoutInterval = TimeSpan.FromMinutes(2); // 2 minutes (lower for quicker disconnect).
 
     // Stream buffer capacity for high-volume streaming.
-    options.StreamBufferCapacity = 819200; // 8 KB (lower for faster streaming).
+    options.StreamBufferCapacity = 81920; // 8 KB (lower for faster streaming).
 
    
 }).AddMessagePackProtocol();
@@ -49,10 +49,10 @@ builder.Services.AddSignalR(options =>
 builder.Services.Configure<HubOptions<ChatHub>>(options =>
 {
     // Maximum message size per hub.
-    options.MaximumReceiveMessageSize = 65536; // 64 KB (lower for improved speed).
+    options.MaximumReceiveMessageSize = 655360; // 64 KB (lower for improved speed).
 
     // Maximum parallel invocations per client for this hub.
-    options.MaximumParallelInvocationsPerClient = 10; // Lower based on concurrency needs.
+    options.MaximumParallelInvocationsPerClient = 7; // Lower based on concurrency needs.
 });
 
 

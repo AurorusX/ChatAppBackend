@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.DTOs
 {
+	[Serializable]
 	public class MessageDto
 	{
 		[Required]

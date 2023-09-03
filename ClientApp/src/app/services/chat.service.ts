@@ -86,7 +86,6 @@ export class ChatService {
   async sendMessage(content:string){
       const message:Message={
         from:this.name,
-        timestamp: new Date(),
         content,
 
       };
@@ -100,7 +99,6 @@ export class ChatService {
         from:this.name,
         to,
         content,
-        timestamp:new Date()
       };
 
       if(!this.privateMessageInitiated){

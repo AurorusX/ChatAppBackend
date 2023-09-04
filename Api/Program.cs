@@ -23,37 +23,37 @@ builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSingleton<ChatService>();
 builder.Services.AddScoped<ChatService>();
 
-//builder.Services.AddSignalR();
-builder.Services.AddSignalR(options =>
-{
-    // Enable detailed error messages for debugging (for development only).
-    options.EnableDetailedErrors = true;
+builder.Services.AddSignalR();
+//builder.Services.AddSignalR(options =>
+//{
+//    // Enable detailed error messages for debugging (for development only).
+//    options.EnableDetailedErrors = true;
 
-    // Set maximum message size (in bytes).
-    options.MaximumReceiveMessageSize = 65536; // 64 KB (lower for improved speed).
+//    // Set maximum message size (in bytes).
+//    options.MaximumReceiveMessageSize = 65536; // 64 KB (lower for improved speed).
 
-    // Keep-alive interval for pinging clients.
-    options.KeepAliveInterval = TimeSpan.FromSeconds(2); // 15 seconds (lower for quicker detection).
+//    // Keep-alive interval for pinging clients.
+//    options.KeepAliveInterval = TimeSpan.FromSeconds(2); // 15 seconds (lower for quicker detection).
 
-    // Client timeout interval for detecting idle clients.
-    options.ClientTimeoutInterval = TimeSpan.FromMinutes(2); // 2 minutes (lower for quicker disconnect).
+//    // Client timeout interval for detecting idle clients.
+//    options.ClientTimeoutInterval = TimeSpan.FromMinutes(2); // 2 minutes (lower for quicker disconnect).
 
-    // Stream buffer capacity for high-volume streaming.
-    options.StreamBufferCapacity = 81920; // 8 KB (lower for faster streaming).
+//    // Stream buffer capacity for high-volume streaming.
+//    options.StreamBufferCapacity = 81920; // 8 KB (lower for faster streaming).
 
    
-}).AddMessagePackProtocol();
+//}).AddMessagePackProtocol();
 
 
 
-builder.Services.Configure<HubOptions<ChatHub>>(options =>
-{
-    // Maximum message size per hub.
-    options.MaximumReceiveMessageSize = 655360; // 64 KB (lower for improved speed).
+//builder.Services.Configure<HubOptions<ChatHub>>(options =>
+//{
+//    // Maximum message size per hub.
+//    options.MaximumReceiveMessageSize = 655360; // 64 KB (lower for improved speed).
 
-    // Maximum parallel invocations per client for this hub.
-    options.MaximumParallelInvocationsPerClient = 7; // Lower based on concurrency needs.
-});
+//    // Maximum parallel invocations per client for this hub.
+//    options.MaximumParallelInvocationsPerClient = 7; // Lower based on concurrency needs.
+//});
 
 
 builder.Services.AddWebSockets(options => { /* Empty configuration action */ });
@@ -83,7 +83,7 @@ app.UseCors(x => x
    .AllowAnyMethod()
     .AllowAnyOrigin());// Add your allowed origins here
 
-app.UseWebSockets();
+//app.UseWebSockets();
 app.UseAuthorization(); 
 app.UseDefaultFiles();
 app.UseStaticFiles();

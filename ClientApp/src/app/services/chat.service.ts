@@ -49,6 +49,7 @@ export class ChatService {
       this.chatConnection.on('OpenPrivateChat',(newMessage:Message)=>{
         this.privateMessages = [...this.privateMessages,newMessage];
         this. privateMessageInitiated=true;
+        //opening modal for other user
         const modalRef=this.modalService.open(PrivateChatComponent);
         modalRef.componentInstance.toUser=newMessage.from;
 
@@ -86,7 +87,7 @@ export class ChatService {
   async sendMessage(content:string){
       const message:Message={
         from:this.name,
-        content,
+        content
 
       };
 
@@ -98,7 +99,7 @@ export class ChatService {
       const message:Message={
         from:this.name,
         to,
-        content,
+        content
       };
 
       if(!this.privateMessageInitiated){

@@ -25,12 +25,9 @@
           <div class="form-floating" *ngIf="ApiErrors.length > 0">
             <ul class="text-danger">
               <li *ngFor="let err of ApiErrors">
-                {{err}}
-
+                <span *ngIf="err.length < 70">{{ err }}</span>
               </li>
             </ul>
-
-
           </div>
 
           <div class="d-grid mt-4 px-4">

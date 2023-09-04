@@ -19,6 +19,7 @@ export class HomeComponent {
       constructor(private formbuilder :FormBuilder,private chatService:ChatService){}
 
       ngOnInit():void{
+
         this.initializeForm();
 
       }
@@ -46,6 +47,7 @@ export class HomeComponent {
                   if(typeof(error.error)!=='object'){
                     this.ApiErrors.push(error.error);
                   }
+                  window.location.reload();
                 }
 
                 })

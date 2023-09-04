@@ -1,16 +1,9 @@
-<!-- <div style="overflow-y: auto; height: 461px;">
-  <p class="card-text" *ngFor ="let message of messages">
-    <span class="text-primary">{{message.from}}: </span>
-    <span class="ml-1">{{message.content}}</span>
 
-  </p>
-
-</div> -->
 <div style="overflow-y: auto; height: 461px;">
   <p class="card-text" *ngFor="let message of messages">
     <span class="text-primary">{{ message.from }}: </span>
     <span class="ml-1">{{ message.content }}</span>
     <br>
-    <small class="text-muted">{{ message.timestamp | date:'medium':'UTC' }}</small>
+    <small class="text-muted">{{ message.timestamp }}</small>
   </p>
 </div>

@@ -18,6 +18,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit():void{
     this.chatService.createConnection();
+    this.chatService.messages=[];
     this.loadChatMessages();
 
   }

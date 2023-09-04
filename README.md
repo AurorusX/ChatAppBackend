@@ -40,15 +40,14 @@ The project uses the following technologies:
 
 Follow these instructions to get the project up and running on your local machine:
 
-1. Clone the repository: `git clone https://github.com/yourusername/your-repo.git`
+1. Clone the repository: `git clone https://github.com/AurorusX/ChatAppBackend.git`
 2. Navigate to the project directory: `cd your-repo`
 3. Install dependencies:
    - For the Angular front-end, navigate to the `ClientApp` directory and run `npm install`.
    - For the .NET Core back-end, run `dotnet restore`.
 4. Configure the database connection in the `appsettings.json` file.
-5. Apply database migrations: `dotnet ef database update`.
-6. Build the solution: `dotnet build`.
-7. Run the application: `dotnet run`.
+5. Build the solution: `dotnet build`.
+6. Run the application: `dotnet run`.
 
 ## Usage
 

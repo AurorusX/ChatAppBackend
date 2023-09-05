@@ -28,7 +28,7 @@ namespace Api.Controllers
         [HttpPost("register-user")]
         public IActionResult RegisterUser(UserDto model)
         {
-            if (_chatService.AddUserToLIst(model.Name))
+            if (_chatService.AddUserToList(model.Name))
             {
                 //204 code
 				return NoContent();

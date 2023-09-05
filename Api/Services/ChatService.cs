@@ -22,23 +22,26 @@ namespace Api.Services
         private static readonly Dictionary<string,string> Users = new Dictionary<string,string>();
 
 
-		public bool AddUserToLIst(string addedUser)
-		{
-			lock(Users)
-			{
-				foreach(var user in Users)
-				{
-					if(user.Key.ToLower() == addedUser.ToLower())
-					{
-						return false;
-					}
-				}
-				Users.Add(addedUser, null);
-				return true;
-			}
-		}
+        public bool AddUserToLIst(string addedUser)
+        {
+            lock (Users)
+            {
+                // Normalize the addedUser by removing spaces and converting to lowercase
+                var normalizedUser = addedUser.Replace(" ", "").ToLower();
 
-		public void AddUserConnectionId(string user,string connectionId)
+                // Check if the normalized user already exists in the Users dictionary
+                if (Users.ContainsKey(normalizedUser))
+                {
+                    return false; // User with this normalized name already exists
+                }
+
+                // Add the normalized user to the Users dictionary
+                Users.Add(normalizedUser, null);
+                return true;
+            }
+        }
+
+        public void AddUserConnectionId(string user,string connectionId)
 		{
 			lock (Users)
 			{

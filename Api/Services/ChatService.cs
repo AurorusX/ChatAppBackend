@@ -6,25 +6,20 @@ using System.Threading.Tasks;
 
 namespace Api.Services
 {
-	public class ChatService
+    public class ChatService
+    {
+        private readonly ChatDbContext _chatDbContext;
+        private readonly Dictionary<string, string> Users = new Dictionary<string, string>();
+        private readonly object usersLock = new object();
 
-
-	{
-       
-        private readonly ChatDbContext _chatdbcontext;
-        public ChatService(ChatDbContext ChatDbContext)
+        public ChatService(ChatDbContext chatDbContext)
         {
-           
-            _chatdbcontext = ChatDbContext;
+            _chatDbContext = chatDbContext;
         }
 
-
-        private static readonly Dictionary<string,string> Users = new Dictionary<string,string>();
-
-
-        public bool AddUserToLIst(string addedUser)
+        public bool AddUserToList(string addedUser)
         {
-            lock (Users)
+            lock (usersLock)
             {
                 // Normalize the addedUser by removing spaces and converting to lowercase
                 var normalizedUser = addedUser.Replace(" ", "").ToLower();
@@ -41,58 +36,55 @@ namespace Api.Services
             }
         }
 
-        public void AddUserConnectionId(string user,string connectionId)
-		{
-			lock (Users)
-			{
-				if (Users.ContainsKey(user))
-				{
-					Users[user] = connectionId;
-				}
-			}
-		}
-
-		public string GetUserByConnectionId(string connectionId)
-		{
-			lock(Users)
-			{
-				return Users.Where(x=>x.Value == connectionId).Select(x=>x.Key).FirstOrDefault();
-			}
-		}
-
-
-		public string GetConnectionIdByUser(string user)
-		{
-			lock (Users)
-			{
-				return Users.Where(x => x.Key == user).Select(x => x.Value).FirstOrDefault();
-			}
-		}
-
-		public void RemoveUserFromList(string user)
-		{
-			lock( Users)
-			{
-				if (Users.ContainsKey(user))
-				{
-					Users.Remove(user);
-				}
-			}
-		}
-
-		public string[] GetOnlineUsers()
-		{
-			lock (Users)
-			{
-				return Users.OrderBy(x=> x.Key).Select(x=>x.Key).ToArray();
-			}
-		}
-
-
-
-        public Task<List<ChatMessage>>GetChatMessagesAsync(string chatId)
+        public void AddUserConnectionId(string user, string connectionId)
         {
-            return _chatdbcontext.ChatMessages
+            lock (usersLock)
+            {
+                if (Users.ContainsKey(user))
+                {
+                    Users[user] = connectionId;
+                }
+            }
+        }
+
+        public string GetUserByConnectionId(string connectionId)
+        {
+            lock (usersLock)
+            {
+                return Users.Where(x => x.Value == connectionId).Select(x => x.Key).FirstOrDefault();
+            }
+        }
+
+        public string GetConnectionIdByUser(string user)
+        {
+            lock (usersLock)
+            {
+                return Users.Where(x => x.Key == user).Select(x => x.Value).FirstOrDefault();
+            }
+        }
+
+        public void RemoveUserFromList(string user)
+        {
+            lock (usersLock)
+            {
+                if (Users.ContainsKey(user))
+                {
+                    Users.Remove(user);
+                }
+            }
+        }
+
+        public string[] GetOnlineUsers()
+        {
+            lock (usersLock)
+            {
+                return Users.OrderBy(x => x.Key).Select(x => x.Key).ToArray();
+            }
+        }
+
+        public Task<List<ChatMessage>> GetChatMessagesAsync(string chatId)
+        {
+            return _chatDbContext.ChatMessages
                 .Where(message => message.ChatId == chatId)
                 .ToListAsync();
         }
@@ -115,13 +107,5 @@ namespace Api.Services
                 return Task.FromResult("Invalid input format");
             }
         }
-
-
-
-
-
-
-
-
     }
-} 
+}

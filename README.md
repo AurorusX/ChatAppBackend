@@ -1,4 +1,5 @@
 # Ascendant Chat Application ~ Shane Okukenu (For Ascendant)
+(since repo is public, deployment in Code Review Session)
 
 A real-time chat application built with Angular, SignalR, and .NET Core.
 

@@ -9,82 +9,99 @@ namespace Api.Services
     public class ChatService
     {
         private readonly ChatDbContext _chatDbContext;
-        private readonly Dictionary<string, string> Users = new Dictionary<string, string>();
-        private readonly object usersLock = new object();
 
         public ChatService(ChatDbContext chatDbContext)
         {
             _chatDbContext = chatDbContext;
         }
 
-        public bool AddUserToList(string addedUser)
+        public async Task<bool> AddUserToListAsync(string username)
         {
-            lock (usersLock)
+            // Check if the user already exists in the database
+            var existingUser = await _chatDbContext.Users
+                .Where(u => u.Name == username)
+                .FirstOrDefaultAsync();
+
+            if (existingUser == null)
             {
-                // Normalize the addedUser by removing spaces and converting to lowercase
-                var normalizedUser = addedUser.Replace(" ", "").ToLower();
-
-                // Check if the normalized user already exists in the Users dictionary
-                if (Users.ContainsKey(normalizedUser))
+                var newUser = new User
                 {
-                    return false; // User with this normalized name already exists
-                }
+                    Name = username,
+                    //ConnectionId = connectionId
+                };
 
-                // Add the normalized user to the Users dictionary
-                Users.Add(normalizedUser, null);
+                _chatDbContext.Users.Add(newUser);
+                await _chatDbContext.SaveChangesAsync();
                 return true;
-            }
-        }
 
-        public void AddUserConnectionId(string user, string connectionId)
-        {
-            lock (usersLock)
+            }
+            else
             {
-                if (Users.ContainsKey(user))
-                {
-                    Users[user] = connectionId;
-                }
+                return false;
             }
+
+           
         }
 
-        public string GetUserByConnectionId(string connectionId)
+        public async Task AddUserConnectionIdAsync(string username, string connectionId)
         {
-            lock (usersLock)
+            var user = await _chatDbContext.Users
+                .Where(u => u.Name == username)
+                .FirstOrDefaultAsync();
+
+            if (user != null)
             {
-                return Users.Where(x => x.Value == connectionId).Select(x => x.Key).FirstOrDefault();
+                user.ConnectionId = connectionId;
+                await _chatDbContext.SaveChangesAsync();
             }
         }
 
-        public string GetConnectionIdByUser(string user)
+        public async Task<string> GetUserByConnectionIdAsync(string connectionId)
         {
-            lock (usersLock)
+            var user = await _chatDbContext.Users
+                .Where(u => u.ConnectionId == connectionId)
+                .FirstOrDefaultAsync();
+
+            return user?.Name;
+        }
+
+        public async Task<string> GetConnectionIdByUserAsync(string username)
+        {
+            var user = await _chatDbContext.Users
+                .Where(u => u.Name == username)
+                .FirstOrDefaultAsync();
+
+            return user?.ConnectionId;
+        }
+
+        public async Task RemoveUserFromListAsync(string username)
+        {
+            var user = await _chatDbContext.Users
+                .Where(u => u.Name == username)
+                .FirstOrDefaultAsync();
+
+            if (user != null)
             {
-                return Users.Where(x => x.Key == user).Select(x => x.Value).FirstOrDefault();
+                _chatDbContext.Users.Remove(user); // Remove the user
+                await _chatDbContext.SaveChangesAsync(); // Save changes to the database
             }
         }
 
-        public void RemoveUserFromList(string user)
+        public async Task<string[]> GetOnlineUsersAsync()
         {
-            lock (usersLock)
-            {
-                if (Users.ContainsKey(user))
-                {
-                    Users.Remove(user);
-                }
-            }
+            var onlineUsers = await _chatDbContext.Users
+                .Where(u => u.ConnectionId != null)
+                .Select(u => u.Name)
+                .ToArrayAsync();
+
+            return onlineUsers;
         }
 
-        public string[] GetOnlineUsers()
-        {
-            lock (usersLock)
-            {
-                return Users.OrderBy(x => x.Key).Select(x => x.Key).ToArray();
-            }
-        }
+        // Other methods follow the same pattern...
 
-        public Task<List<ChatMessage>> GetChatMessagesAsync(string chatId)
+        public async Task<List<ChatMessage>> GetChatMessagesAsync(string chatId)
         {
-            return _chatDbContext.ChatMessages
+            return await _chatDbContext.ChatMessages
                 .Where(message => message.ChatId == chatId)
                 .ToListAsync();
         }

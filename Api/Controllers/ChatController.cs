@@ -26,15 +26,16 @@ namespace Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("register-user")]
-        public IActionResult RegisterUser(UserDto model)
+        public async Task<IActionResult> RegisterUserAsync(UserDto model)
         {
-            if (_chatService.AddUserToList(model.Name))
+            var res = await _chatService.AddUserToListAsync(model.Name);
+            if (res)
             {
                 //204 code
 				return NoContent();
 			}
 
-            return BadRequest("Name is taken, choose another");
+            return BadRequest("Name is taken, choose another.. If retrying entry wait 7s");
 
 
            

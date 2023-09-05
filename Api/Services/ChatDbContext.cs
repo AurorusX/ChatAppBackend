@@ -13,5 +13,6 @@ namespace Api.Services
         }
 
         public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

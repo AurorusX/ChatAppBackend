@@ -1,5 +1,5 @@
 import { ChatService } from './../services/chat.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
       userForm:FormGroup =new FormGroup({});
 
@@ -19,7 +19,6 @@ export class HomeComponent {
       constructor(private formbuilder :FormBuilder,private chatService:ChatService){}
 
       ngOnInit():void{
-
         this.initializeForm();
 
       }
@@ -47,12 +46,6 @@ export class HomeComponent {
                   if(typeof(error.error)!=='object'){
                     this.ApiErrors.push(error.error);
                   }
-                  try {
-                    localStorage.clear();
-                    sessionStorage.clear();
-                    location.reload();
-                  } catch (e) {}
-
                 }
 
                 })
@@ -63,6 +56,7 @@ export class HomeComponent {
 
         closeChat(){
           this.OpenChat=false;
+          this.chatService.stopConnection();
         }
 
       }

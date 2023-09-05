@@ -34,8 +34,8 @@ namespace Api.Hubs
 		public override async Task OnDisconnectedAsync(Exception ex )
 		{
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "AscendantChat");
-			var user =_chatservice.GetUserByConnectionId(Context.ConnectionId);
-			_chatservice.RemoveUserFromList(user);
+			var user =await _chatservice.GetUserByConnectionIdAsync(Context.ConnectionId);
+			await _chatservice.RemoveUserFromListAsync(user);
 			await DisplayOnlineUsers();
 			await base.OnDisconnectedAsync(ex);
 
@@ -46,14 +46,14 @@ namespace Api.Hubs
 
 		public  async Task AddUserConnectionId(string name)
 		{
-			_chatservice.AddUserConnectionId(name,Context.ConnectionId);
+			await _chatservice.AddUserConnectionIdAsync(name,Context.ConnectionId);
 			await DisplayOnlineUsers();
 
 		}
 
 		private async Task DisplayOnlineUsers()
 		{
-			var usersOnline = _chatservice.GetOnlineUsers();
+			var usersOnline = await _chatservice.GetOnlineUsersAsync();
 			await Clients.Groups("AscendantChat").SendAsync("usersOnline", usersOnline);
 		}
 
@@ -72,7 +72,7 @@ namespace Api.Hubs
 		{
 			string privategroupname = GetPrivateGroupName(message.From,message.To);
 			await Groups.AddToGroupAsync(Context.ConnectionId, privategroupname);
-			var toConnectionId = _chatservice.GetConnectionIdByUser(message.To);
+			var toConnectionId = await _chatservice.GetConnectionIdByUserAsync(message.To);
 			await Groups.AddToGroupAsync(toConnectionId, privategroupname);
 
             message.ChatId = privategroupname;
@@ -100,7 +100,7 @@ namespace Api.Hubs
 			await Clients.Group(privategroupname).SendAsync("ClosePrivateChat");
 
 			await Groups.RemoveFromGroupAsync(Context.ConnectionId, privategroupname);
-			var toConnectionId = _chatservice.GetConnectionIdByUser(to);
+			var toConnectionId = await _chatservice.GetConnectionIdByUserAsync(to);
 			await Groups.RemoveFromGroupAsync(toConnectionId, privategroupname);
 
 		}

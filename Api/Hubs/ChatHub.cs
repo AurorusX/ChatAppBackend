@@ -63,7 +63,7 @@ namespace Api.Hubs
 		{
             message.ChatId = "AscendantChat";
 			message.Timestamp = DateTime.Now;
-            SaveMessageToDatabase(message);
+            await SaveMessageToDatabase(message);
             await Clients.Group("AscendantChat").SendAsync("NewMessage", message);
 		}
 
@@ -75,7 +75,7 @@ namespace Api.Hubs
 			await Groups.AddToGroupAsync(toConnectionId, privategroupname);
 
             message.ChatId = privategroupname;
-            SaveMessageToDatabase(message);
+            await SaveMessageToDatabase(message);
 
             await Clients.Client(toConnectionId).SendAsync("OpenPrivateChat", message);
 		}
@@ -86,7 +86,7 @@ namespace Api.Hubs
 			message.ChatId = privategroupname;
             message.Timestamp = DateTime.Now;
 
-            SaveMessageToDatabase(message);
+            await SaveMessageToDatabase(message);
 
 			await Clients.Group(privategroupname).SendAsync("NewPrivateMessage", message);
 		}
@@ -110,7 +110,7 @@ namespace Api.Hubs
 		}
 
 
-        private void SaveMessageToDatabase(MessageDto message)
+        private async Task SaveMessageToDatabase(MessageDto message)
         {
             var newMessage = new ChatMessage
             {
@@ -121,8 +121,8 @@ namespace Api.Hubs
 				ChatId = message.ChatId,
             };
 
-            _chatdbcontext.ChatMessages.Add(newMessage);
-            _chatdbcontext.SaveChanges();
+            await _chatdbcontext.ChatMessages.AddAsync(newMessage);
+            await _chatdbcontext.SaveChangesAsync();
 
            
         }

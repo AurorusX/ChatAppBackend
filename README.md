@@ -45,9 +45,8 @@ Follow these instructions to get the project up and running on your local machin
 3. Install dependencies:
    - For the Angular front-end, navigate to the `ClientApp` directory and run `npm install`.
    - For the .NET Core back-end, run `dotnet restore`.
-4. Configure the database connection in the `appsettings.json` file.
-5. Build the solution: `dotnet build`.
-6. Run the application: `dotnet run`.
+4. Build the solution: `dotnet build`.
+5. Run the application: `dotnet run`.
 
 ## Usage
 

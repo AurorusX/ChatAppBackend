@@ -47,7 +47,12 @@ export class HomeComponent {
                   if(typeof(error.error)!=='object'){
                     this.ApiErrors.push(error.error);
                   }
-                  window.location.reload();
+                  try {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    location.reload();
+                  } catch (e) {}
+
                 }
 
                 })

@@ -9,7 +9,6 @@ on:
   pull_request_review_comment:
     types: [created]
 
-    
 concurrency:
   group:
     ${{ github.repository }}-${{ github.event.number || github.head_ref ||
@@ -30,3 +29,4 @@ jobs:
           review_simple_changes: false
           review_comment_lgtm: false
 
+          

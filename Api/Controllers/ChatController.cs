@@ -86,5 +86,27 @@ namespace Api.Controllers
             }
         }
 
+         [HttpGet("get-chat-messages")]
+        public async Task<IActionResult> RetrieveMessagesAsyncTest2(string chatId)
+        {
+            try
+            {
+                var messages = await _chatService.GetChatMessagesAsync(chatId);
+
+                if (messages.IsNullOrEmpty())
+                {
+                    chatId = await _chatService.ConvertToOtherOrderAsync(chatId);
+                    messages = await _chatService.GetChatMessagesAsync(chatId);
+
+                }
+                // 200 OK status code with the messages
+                return Ok(messages);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }
